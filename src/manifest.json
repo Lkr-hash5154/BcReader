@@ -1,0 +1,238 @@
+{
+  "package": "Watch.Bc.Reader",
+  "name": "计算器",
+  "versionName": "2.1.3RW",
+  "versionCode": 251114,
+  "minPlatformVersion": 1100,
+  "icon": "/common/logo.png",
+  "simulationVersion": "default",
+  "deviceTypeList": [
+    "watch"
+  ],
+  "features": [
+    {
+      "name": "system.router"
+    },
+    {
+      "name": "system.storage"
+    },
+    {
+      "name": "system.prompt"
+    },
+    {
+      "name": "system.pasteboard"
+    },
+    {
+      "name": "system.clipboard"
+    },
+    {
+      "name": "system.file"
+    },
+    {
+      "name": "system.request"
+    },
+    {
+      "name": "system.fetch"
+    },
+    {
+      "name": "system.network"
+    },
+    {
+      "name": "system.interconnect"
+    },
+    {
+      "name": "system.configuration"
+    },
+    {
+      "name": "system.app"
+    },
+    {
+      "name": "system.brightness"
+    },
+    {
+      "name": "system.device"
+    },
+    {
+      "name": "system.vibrator"
+    },
+    {
+      "name": "system.battery"
+    }
+  ],
+  "config": {
+    "logLevel": "log",
+    "designWidth": 432
+  },
+  "router": {
+    "entry": "pages/calculator",
+    "pages": {
+      "pages/about_calculator": {
+        "component": "about_calculator"
+      },
+      "pages/calculator": {
+        "component": "calculator",
+        "launchMode": "singleTask"
+      },
+      "pages/calculatorSetting": {
+        "component": "calculatorSetting"
+      },
+      "pages/calculatorHistory": {
+        "component": "calculatorHistory"
+      },
+      "pages/index": {
+        "component": "index",
+        "launchMode": "singleTask"
+      },
+      "pages/detail": {
+        "component": "detail"
+      },
+      "pages/detailsetting": {
+        "component": "detailsetting"
+      },
+      "pages/readPresent": {
+        "component": "readPresent"
+      },
+      "pages/autoRead": {
+        "component": "autoRead"
+      },
+      "pages/opacity": {
+        "component": "opacity"
+      },
+      "pages/more": {
+        "component": "more"
+      },
+      "pages/about": {
+        "component": "about"
+      },
+      "pages/fontSetting": {
+        "component": "fontSetting"
+      },
+      "pages/marginSetting": {
+        "component": "marginSetting"
+      },
+      "pages/chapterSwitchSensitivity": {
+        "component": "chapterSwitchSensitivity"
+      },
+      "pages/push": {
+        "component": "push"
+      },
+      "pages/info": {
+        "component": "info"
+      },
+      "pages/swipe": {
+        "component": "swipe"
+      },
+      "pages/gestureSetting": {
+        "component": "gestureSetting"
+      },
+      "pages/bookmarks": {
+        "component": "bookmarks"
+      },
+      "pages/pageSizeSetting": {
+        "component": "pageSizeSetting"
+      },
+      "pages/bookinfo": {
+        "component": "bookinfo"
+      },
+      "pages/confirm": {
+        "component": "confirm"
+      },
+      "pages/editBookmark": {
+        "component": "editBookmark"
+      },
+      "pages/help": {
+        "component": "help"
+      },
+      "pages/screenBrightness": {
+        "component": "screenBrightness"
+      },
+      "pages/list": {
+        "component": "list"
+      },
+      "pages/teacherScreen": {
+        "component": "teacherScreen"
+      },
+      "pages/progressBarSetting": {
+        "component": "progressBarSetting"
+      },
+      "pages/shelfStyle": {
+        "component": "shelfStyle"
+      },
+      "pages/alwaysShowTimeSensitivitySetting": {
+        "component": "alwaysShowTimeSensitivitySetting"
+      },
+      "pages/textReader": {
+        "component": "textReader"
+      },
+      "pages/chapterSwitchSetting": {
+        "component": "chapterSwitchSetting"
+      },
+      "pages/chapterSwitchStyle": {
+        "component": "chapterSwitchStyle"
+      },
+      "pages/swipeSensitivity": {
+        "component": "swipeSensitivity"
+      },
+      "pages/tutorial": {
+        "component": "tutorial"
+      },
+      "pages/shelfPageSizeSetting": {
+        "component": "shelfPageSizeSetting"
+      },
+      "pages/autoReadDistanceSetting": {
+        "component": "autoReadDistanceSetting"
+      },
+      "pages/timeFormatSetting": {
+        "component": "timeFormatSetting"
+      },
+      "pages/preventParagraphSplittingSetting": {
+        "component": "preventParagraphSplittingSetting"
+      },
+      "pages/readingSetting": {
+        "component": "readingSetting"
+      },
+      "pages/shelfSetting": {
+        "component": "shelfSetting"
+      },
+      "pages/interactionSetting": {
+        "component": "interactionSetting"
+      },
+      "pages/performanceSetting": {
+        "component": "performanceSetting"
+      },
+      "pages/progressSavingSetting": {
+        "component": "progressSavingSetting"
+      },
+      "pages/timeSetting": {
+        "component": "timeSetting"
+      },
+      "pages/preloadChapterSetting": {
+        "component": "preloadChapterSetting"
+      },
+      "pages/lastReadSetting": {
+        "component": "lastReadSetting"
+      },
+      "pages/vibrationSetting": {
+        "component": "vibrationSetting"
+      }
+      ,
+      "pages/change_chapter": {
+        "component": "change_chapter"
+      }
+    ,
+      "pages/homeDisplaySetting": {
+        "component": "homeDisplaySetting"
+      },
+      "pages/readModeSetting": {
+        "component": "readModeSetting"
+      }
+      ,
+      "pages/marqueeSetting": {
+        "component": "marqueeSetting"
+      }
+    }
+  },
+  "display": {
+    "backgroundColor": "#000000"
+  }
+}

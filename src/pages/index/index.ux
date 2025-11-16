@@ -1,0 +1,418 @@
+<template>
+	<div class="page" style="flex-direction: column;">
+
+	  <img if="{{allBooks.length == 0}}" static src="/common/images/empty.png"
+		  style="position: absolute;left: 152px;top: 156px;width: 128px;height: 128px;" />
+
+	  <text if="{{allBooks.length == 0}}" static style="position: absolute;left: 0px;top: 319px;width: 432px;line-height: 42px;font-weight:bold;font-size:32px;color:white;text-align:center;">书架空空</text>
+
+      <list class="list" if="{{shelfStyle === 'list' && displayMode === 'all'}}">
+		  <list-item for="{{visibleBooks}}" class="item" @click="selectFile($item)" type="nook">
+			  <marquee if="{{shelfMarqueeEnabled}}" scrollamount="22" class="itemtext" text-offset="25">{{$item.name}}</marquee>
+              <text else class="itemtext" >{{$item.name}}</text>
+			  <marquee if="{{shelfMarqueeEnabled}}" scrollamount="40" text-offset="25" class="itemtext2">{{ $item.isLastRead ? '上次阅读 · ' : '' }}{{roundToDecimal(((($item.progress.chapterIndex || 0) + 1) / $item.chapterCount) * 100, 2) || 0}}% · 看到 {{(($item.progress.chapterIndex || 0) + 1)}} / {{$item.chapterCount}} 章</marquee>
+              <text else class="itemtext2">{{ $item.isLastRead ? '上次阅读 · ' : '' }}{{roundToDecimal(((($item.progress.chapterIndex || 0) + 1) / $item.chapterCount) * 100, 2) || 0}}% · 看到 {{(($item.progress.chapterIndex || 0) + 1)}} / {{$item.chapterCount}} 章</text>
+		  </list-item>
+          <list-item type="pagination" class="pagination-container" if="{{totalPages > 1}}">
+            <div class="pagination-controls">
+              <img src="/common/images/pre.png" if="{{currentPage > 0}}" @click="prevPage" class="pagination-button"/>
+              <text class="pagination-text">{{currentPage + 1}} / {{totalPages}}</text>
+              <img src="/common/images/next.png" if="{{currentPage < totalPages - 1}}" @click="nextPage" class="pagination-button"/>
+            </div>
+          </list-item>
+	  </list>
+
+      <list class="list" if="{{shelfStyle === 'cover' && displayMode === 'all'}}">
+          <list-item for="{{visibleBooks}}" class="item cover-item" @click="selectFile($item)" type="nook">
+            <img if="{{$item.hasRealCover}}" class="cover-image" src="internal://files/books/{{$item.dirName}}/{{$item.coverFileName}}" />
+            <div class="cover-content">
+              <marquee if="{{shelfMarqueeEnabled}}" scrollamount="30" class="itemtext" text-offset="25">{{$item.name}}</marquee>
+              <text else class="itemtext" >{{$item.name}}</text>
+              <marquee if="{{shelfMarqueeEnabled}}" scrollamount="40" class="itemtext2" text-offset="25">{{ $item.isLastRead ? '上次阅读 · ' : '' }}{{roundToDecimal(((($item.progress.chapterIndex || 0) + 1) / $item.chapterCount) * 100, 2) || 0}}% · 看到 {{(($item.progress.chapterIndex || 0) + 1)}} / {{$item.chapterCount}} 章</marquee>
+              <text else class="itemtext2" >{{ $item.isLastRead ? '上次阅读 · ' : '' }}{{roundToDecimal(((($item.progress.chapterIndex || 0) + 1) / $item.chapterCount) * 100, 2) || 0}}% · 看到 {{(($item.progress.chapterIndex || 0) + 1)}} / {{$item.chapterCount}} 章</text>
+            </div>
+          </list-item>
+          <list-item type="pagination" class="pagination-container" if="{{totalPages > 1 && displayMode === 'all'}}">
+            <div class="pagination-controls">
+              <img src="/common/images/pre.png" if="{{currentPage > 0}}" @click="prevPage" class="pagination-button"/>
+              <text class="pagination-text">{{currentPage + 1}} / {{totalPages}}</text>
+              <img src="/common/images/next.png" if="{{currentPage < totalPages - 1}}" @click="nextPage" class="pagination-button"/>
+            </div>
+          </list-item>
+      </list>
+
+      <list class="list" if="{{displayMode === 'category'}}">
+        <list-item if="{{selectedCategory}}" class="item" @click="backToCategoryList" type="nook" style="height: 72px;">
+          <text class="itemtext">← 返回分类列表</text>
+        </list-item>
+        <list-item for="{{visibleBooks}}" class="item {{shelfStyle === 'cover' && $item.hasRealCover ? 'cover-item' : ''}}" @click="handleCategoryItemClick($item)" type="nook">
+          <img if="{{shelfStyle === 'cover' && $item.hasRealCover}}" class="cover-image" src="internal://files/books/{{$item.dirName}}/{{$item.coverFileName}}" />
+          <div class="{{shelfStyle === 'cover' ? 'cover-content' : 'category-item-content'}}">
+              <marquee if="{{shelfMarqueeEnabled && !$item.isCategory}}" scrollamount="22" text-offset="25" class="itemtext" >{{$item.name}}</marquee>
+              <text else class="itemtext" >{{$item.name}}</text>
+              <marquee if="{{shelfMarqueeEnabled && !$item.isCategory}}" scrollamount="40" text-offset="25" class="itemtext2" >{{ $item.isLastRead ? '上次阅读 · ' : '' }}{{roundToDecimal(((($item.progress.chapterIndex || 0) + 1) / $item.chapterCount) * 100, 2) || 0}}% · 看到 {{(($item.progress.chapterIndex || 0) + 1)}} / {{$item.chapterCount}} 章</marquee>
+              <text else class="itemtext2">{{ $item.isLastRead ? '上次阅读 · ' : '' }}{{$item.isCategory ? ('共 ' + $item.bookCount + ' 本') : (roundToDecimal(((($item.progress.chapterIndex || 0) + 1) / $item.chapterCount) * 100, 2) || 0) + '% · 看到 ' + (($item.progress.chapterIndex || 0) + 1) + ' / ' + $item.chapterCount + ' 章'}}</text>
+          </div>
+        </list-item>
+        <list-item type="pagination" class="pagination-container" if="{{totalPages > 1 && displayMode === 'category'}}">
+          <div class="pagination-controls">
+            <img src="/common/images/pre.png" if="{{currentPage > 0}}" @click="prevPage" class="pagination-button"/>
+            <text class="pagination-text">{{currentPage + 1}} / {{totalPages}}</text>
+            <img src="/common/images/next.png" if="{{currentPage < totalPages - 1}}" @click="nextPage" class="pagination-button"/>
+          </div>
+        </list-item>
+      </list>
+
+    <img static src="/common/images/hd.png" style="position: absolute;left: 0px;top: 0px;width: 432px;height: 102px;" />
+    <img static src="/common/images/back.png" @click="exit" style="position: absolute;left: 38px;top: 24px;width: 82px;height: 82px;"/>
+    <img static src="/common/images/more.png" @click="routerTo('more')" style="position: absolute;left: 322px;top: 24px;width: 82px;height: 82px;"/>
+    <text style="position: absolute;left: 130px;top: 16px;width: 172px;line-height: 32px;font-weight:bold;font-size:24px;color:rgba(255,255,255,0.6);text-align:center;">
+      {{nowTime}}
+    </text>
+    <text static style="position: absolute;left: 130px;top: 46px;width: 172px;line-height: 42px;font-weight:bold;font-size:32px;color:white;text-align:center;">
+      电子书
+    </text>
+
+    <img if="{{allBooks.length == 0}}" static src="/common/images/push.png" 
+      style="position: absolute;left: 308px;top: 420px;width: 82px;height: 82px;" @click="routerTo('push')"/>
+	</div>
+</template>
+
+<script>
+import router from '@system.router';
+import bookStorage from '../../common/bookStorage.js'
+import storage from '../../common/storage.js';
+import app from '@system.app';
+
+export default {
+  private: {
+    nowTime: "00:00",
+    timer: null,
+    shelfStyle: 'list',
+    isNavigating: false,
+    allBooks: [],
+    visibleBooks: [],
+    currentPage: 0,
+    totalPages: 1,
+    pageSize: 6,
+    lastReadOnTop: true,
+    shelfMarqueeEnabled: false,
+    displayMode: 'all',
+    categories: [],
+    selectedCategory: null,
+    categoryBooks: [],
+    lastReadBook: null
+  },
+  exit(){
+	  app.terminate();
+  },
+  updateTime() {
+    const date = new Date();
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+
+    hours = hours < 10 ? '0' + hours : hours;
+    minutes = minutes < 10 ? '0' + minutes : minutes;
+
+    this.nowTime = `${hours}:${minutes}`;
+  },
+  onInit() {
+    this.updateTime();
+    this.timer = setInterval(() => {
+      this.updateTime();
+    }, 1000);
+    bookStorage.load();
+  },
+  onDestroy(){
+	  if (this.timer) {
+      clearInterval(this.timer);
+      this.timer = null;
+    }
+    this.allBooks = null;
+    this.visibleBooks = null;
+  },
+  onShow() {
+    this.isNavigating = false;
+    this.currentPage = 0;
+    this.loadSettingsAndFiles();
+  },
+  getStorage(key, defaultValue) {
+    return new Promise((resolve) => {
+      storage.get({
+        key: key,
+        success: (data) => {
+          resolve(data || defaultValue);
+        },
+        fail: () => {
+          resolve(defaultValue);
+        }
+      });
+    });
+  },
+  async loadSettingsAndFiles() {
+    const [pageSize, shelfStyle, lastReadOnTop, shelfMarqueeEnabled, displayMode] = await Promise.all([
+      this.getStorage('EBOOK_SHELF_PAGE_SIZE', '12'),
+      this.getStorage('EBOOK_SHELF_STYLE', 'list'),
+      this.getStorage('EBOOK_TOP_LAST_READ', 'true'),
+      this.getStorage('EBOOK_SHELF_MARQUEE_ENABLED', 'false'),
+      this.getStorage('EBOOK_HOME_DISPLAY_MODE', 'all')
+    ]);
+
+    this.pageSize = parseInt(pageSize);
+    this.shelfStyle = shelfStyle;
+    this.lastReadOnTop = lastReadOnTop === 'true';
+    this.shelfMarqueeEnabled = shelfMarqueeEnabled === 'true';
+    this.displayMode = displayMode || 'all';
+
+    this.loadFileList();
+  },
+  async loadFileList() {
+    this.allBooks = await bookStorage.getBooks();
+    this.processBooks();
+    
+    if (this.displayMode === 'category') {
+      this.updateCategories();
+      this.updateCategoryView();
+    } else {
+      this.loadPage(this.currentPage);
+    }
+  },
+  processBooks() {
+    this.lastReadBook = null;
+    if (this.lastReadOnTop && this.allBooks.length > 0) {
+      let lastReadIndex = -1;
+      let latestTimestamp = 0;
+      
+      this.allBooks.forEach((book, index) => {
+        book.isLastRead = false;
+        if (book.progress && book.progress.lastReadTimestamp > latestTimestamp) {
+          latestTimestamp = book.progress.lastReadTimestamp;
+          lastReadIndex = index;
+        }
+      });
+
+      if (lastReadIndex > -1) {
+        const lastReadBook = this.allBooks.splice(lastReadIndex, 1)[0];
+        lastReadBook.isLastRead = true;
+        this.allBooks.unshift(lastReadBook);
+        this.lastReadBook = lastReadBook;
+      }
+    }
+        
+    this.allBooks.forEach(book => {
+        book.hasRealCover = !!(book.hasCover && book.coverFileName);
+    });
+	},
+  updateCategories() {
+    const categorySet = new Set();
+    let hasUncategorized = false;
+    this.allBooks.forEach(book => {
+      if (book.localCategory) {
+        categorySet.add(book.localCategory);
+      } else {
+        hasUncategorized = true;
+      }
+    });
+    this.categories = Array.from(categorySet).sort();
+    if (hasUncategorized) {
+      this.categories.push('未分类');
+    }
+  },
+  updateCategoryView() {
+    if (this.selectedCategory) {
+      if (this.selectedCategory === '未分类') {
+        this.categoryBooks = this.allBooks.filter(book => !book.localCategory);
+      } else {
+        this.categoryBooks = this.allBooks.filter(book => book.localCategory === this.selectedCategory);
+      }
+      this.visibleBooks = this.categoryBooks;
+    } else {
+      const categoryItems = this.categories.map(cat => ({
+        isCategory: true,
+        categoryName: cat,
+        name: cat,
+        bookCount: cat === '未分类' 
+          ? this.allBooks.filter(b => !b.localCategory).length 
+          : this.allBooks.filter(b => b.localCategory === cat).length
+      }));
+      
+      if (this.lastReadBook) {
+        this.visibleBooks = [this.lastReadBook, ...categoryItems];
+      } else {
+        this.visibleBooks = categoryItems;
+      }
+    }
+  },
+  selectCategory(categoryName) {
+    if (typeof categoryName === 'object' && categoryName.categoryName) {
+      categoryName = categoryName.categoryName;
+    }
+    this.selectedCategory = categoryName;
+    this.updateCategoryView();
+  },
+  backToCategoryList() {
+    this.selectedCategory = null;
+    this.updateCategoryView();
+  },
+  handleCategoryItemClick(item) {
+    if (item.isCategory) {
+      this.selectCategory(item.categoryName);
+    } else {
+      this.selectFile(item);
+    }
+  },
+  roundToDecimal(num, decimalPlaces) {
+    return parseFloat(num).toFixed(decimalPlaces);
+  },
+  loadPage(page) {
+    this.totalPages = Math.ceil(this.allBooks.length / this.pageSize) || 1;
+    let safePage = Math.max(0, Math.min(page, this.totalPages - 1));
+    
+    if (this.totalPages > 0) {
+      const start = safePage * this.pageSize;
+      const end = start + this.pageSize;
+      this.visibleBooks = this.allBooks.slice(start, end);
+      this.currentPage = safePage;
+    } else {
+      this.visibleBooks = [];
+      this.currentPage = 0;
+    }
+  },
+  prevPage() {
+    if (this.currentPage > 0) {
+      this.loadPage(this.currentPage - 1);
+    }
+  },
+  nextPage() {
+    if (this.currentPage < this.totalPages - 1) {
+      this.loadPage(this.currentPage + 1);
+    }
+  },
+  async selectFile(item) {
+    if (this.isNavigating || item.isCategory) {
+        return;
+    }
+    this.isNavigating = true;
+
+    const progress = await bookStorage.get(item.dirName);
+    progress.lastReadTimestamp = Date.now();
+    await bookStorage.set(item.dirName, progress);
+    globalThis.enteringDetailView = true;
+
+    router.push({
+        uri: '/pages/detail',
+        params: {
+            name: item.dirName
+        }
+    });
+  },
+  routerTo(page) {
+    router.push({
+      uri: `/pages/${page}`
+    });
+  }
+};
+</script>
+
+<style>
+.page {
+	width: 432px;
+	height: 514px;
+	background-color: #000000;
+}
+
+.list {
+	width: 432px;
+	height: 514px;
+	position: absolute;
+	top:0px;
+	left:0px;
+  padding: 116px 12px;
+}
+
+.item {
+	width: 100%;
+	height: 112px;
+	padding: 14px 20px;
+	margin-bottom: 8px;
+	background-color: #262626;
+	border-radius: 36px;
+	flex-direction: column;
+  justify-content: space-around;
+  align-items: flex-start;
+}
+
+.cover-item {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.cover-image {
+    width: 64px;
+    height: 84px;
+    background-color: #333;
+    margin-right: 16px;
+    border-radius: 8px;
+}
+
+.cover-content {
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: flex-start;
+    flex: 1;
+    height: 100%;
+    overflow: hidden;
+}
+
+.category-item-content {
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: flex-start;
+    flex: 1;
+    height: 100%;
+    overflow: hidden;
+}
+
+.itemtext {
+	font-size: 32px;
+	line-height:40px;
+	width: 100%;
+	font-weight: bold;
+	color: white;
+	text-overflow: ellipsis;
+	lines: 1;
+}
+
+.itemtext2 {
+	font-size: 24px;
+	line-height: 32px;
+	font-weight: bold;
+	color: rgba(255,255,255,0.6);
+	text-overflow: ellipsis;
+	lines: 1;
+}
+
+.pagination-container {
+    width: 100%;
+    height: 80px;
+    justify-content: center;
+    align-items: center;
+}
+.pagination-controls {
+    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-around;
+    padding: 0 8px;
+}
+.pagination-button {
+    width: 72px;
+    height: 72px;
+}
+.pagination-text {
+    font-size: 28px;
+    font-weight: bold;
+    color: white;
+}
+</style>
