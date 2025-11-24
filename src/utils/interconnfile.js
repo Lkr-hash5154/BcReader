@@ -412,7 +412,7 @@ export default class interconnfile {
             let displayMsg = `开始传输失败: ${errorMsg}`;
             
             if (errorMsg.includes('space') || errorMsg.includes('disk') || errorMsg.includes('full') || 
-                errorMsg.includes('storage') || errorMsg.includes('1300')) {
+                errorMsg.includes('storage') || errorMsg.includes('440')) {
                 displayMsg = "存储空间不足";
             }
             
@@ -452,7 +452,7 @@ export default class interconnfile {
             const errorMsg = error.message || '未知错误';
             let displayMsg = `保存封面分块失败: ${errorMsg}`;
             if (errorMsg.includes('space') || errorMsg.includes('disk') || errorMsg.includes('full') || 
-                errorMsg.includes('storage') || errorMsg.includes('1300')) {
+                errorMsg.includes('storage') || errorMsg.includes('440')) {
                 displayMsg = "存储空间不足";
             }
             this.send({ type: "error", message: displayMsg, count: 0 });
@@ -481,7 +481,7 @@ export default class interconnfile {
             const errorMsg = error.message || '未知错误';
             let displayMsg = `完成封面传输失败: ${errorMsg}`;
             if (errorMsg.includes('space') || errorMsg.includes('disk') || errorMsg.includes('full') || 
-                errorMsg.includes('storage') || errorMsg.includes('1300') || errorMsg.includes('202')) {
+                errorMsg.includes('storage') || errorMsg.includes('440') || errorMsg.includes('202')) {
                 displayMsg = "存储空间不足";
             }
             this.send({ type: "error", message: displayMsg, count: 0 });
@@ -600,7 +600,7 @@ export default class interconnfile {
             const errorMsg = error.message || '未知错误';
             let displayMsg = `保存章节失败: ${errorMsg}`;
             if (errorMsg.includes('space') || errorMsg.includes('disk') || errorMsg.includes('full') || 
-                errorMsg.includes('storage') || errorMsg.includes('1300') || errorMsg.includes('202')) {
+                errorMsg.includes('storage') || errorMsg.includes('440') || errorMsg.includes('202')) {
                 displayMsg = "存储空间不足";
             }
             this.send({ type: "error", message: displayMsg, count: this.receivedChapters });
@@ -645,7 +645,7 @@ export default class interconnfile {
             const errorMsg = error.message || '未知错误';
             let displayMsg = `完成章节传输失败: ${errorMsg}`;
             if (errorMsg.includes('space') || errorMsg.includes('disk') || errorMsg.includes('full') || 
-                errorMsg.includes('storage') || errorMsg.includes('1300') || errorMsg.includes('202')) {
+                errorMsg.includes('storage') || errorMsg.includes('440') || errorMsg.includes('202')) {
                 displayMsg = "存储空间不足";
             }
             this.send({ type: "error", message: displayMsg, count: this.receivedChapters });

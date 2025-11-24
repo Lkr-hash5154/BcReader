@@ -1,15 +1,13 @@
 <template>
     <div class="page">
-        <scroll scroll-y="{{true}}" style="position: absolute;width: 432px;height: {{514 - verticalMargin * 2}};top: {{verticalMargin}}px;">
+        <scroll scroll-y="{{true}}" style="position: absolute;width: 192px;height: {{490 - verticalMargin * 2}};top: {{verticalMargin}}px;">
             <div class="content-container">
                 <text class="content" style="font-size: {{fontSize}}px; color: rgba(255,255,255,{{opacity/100}}); line-height: {{lineHeight}}px;">{{content}}</text>
             </div>
         </scroll>
-        <img static src="/common/images/hd.png" style="position: absolute;left: 0px;top: 0px;width: 432px;height: 102px;" />
-        <text style="position: absolute;left: 130px;top: 16px;width: 172px;line-height: 32px;font-weight:bold;font-size:24px;color:rgba(255,255,255,0.6);text-align:center;">{{nowTime}}</text>
-        <marquee if="{{detailMarqueeEnabled}}" text-offset="25" scrollamount="40" style="position: absolute;left: 130px;top: 46px;width: 172px;line-height: 42px;font-weight:bold;font-size:32px;color:white;text-align:center;">{{title}}</marquee>
-        <text else style="position: absolute;left: 130px;top: 46px;width: 172px;line-height: 42px;font-weight:bold;font-size:32px;color:white;text-align:center;lines: 1;">{{title}}</text>
-		<img static src="/common/images/back.png" @click="back" style="position: absolute;left: 38px;top: 24px;width: 82px;height: 82px;"/>
+        <img src="/common/images/hd.png" style="position: absolute;left: 0px;top: 0px;width: 192px;height: 102px;" />
+        <text style="position: absolute;left: 44px;top: 12px;width: 104px;line-height: 32px;font-weight:bold;font-size:20px;color:rgba(255,255,255,0.6);text-align:center;">{{nowTime}}</text>
+        <marquee text-offset="25" scrollamount="40" style="position: absolute;left: 24px;top: 40px;width: 144px;line-height: 42px;font-weight:bold;font-size:28px;color:white;text-align:center;">{{title}}</marquee>
     </div>
 </template>
 
@@ -26,8 +24,7 @@
             fontSize: 26,
             opacity: 100,
             verticalMargin: 10,
-            lineHeight: 30,
-            detailMarqueeEnabled: false
+            lineHeight: 30
         },
         onInit() {
             this.title = this.pageTitle || '详情';
@@ -36,9 +33,6 @@
             this.timer = setInterval(() => {
                 this.updateTime();
             }, 1000);
-            this.loadSettings();
-        },
-        onShow() {
             this.loadSettings();
         },
         onDestroy() {
@@ -79,15 +73,6 @@
                     }
                 }
             });
-            storage.get({
-                key: 'EBOOK_DETAIL_MARQUEE_ENABLED',
-                success: (data) => {
-                    this.detailMarqueeEnabled = data === 'true';
-                },
-                fail: () => {
-                    this.detailMarqueeEnabled = false;
-                }
-            });
         },
         back() {
             router.back();
@@ -99,16 +84,16 @@
     .page {
         flex-direction: column;
         background-color: #000000;
-        width: 432px;
-        height: 514px;
+        width: 192px;
+        height: 490px;
     }
     .content-container {
         position: absolute;
-        width: 432px;
+        width: 192px;
         top: 102px;
     }
     .content {
-        width: 432px;
+        width: 192px;
         text-align: left; 
         font-weight: bold;
     }

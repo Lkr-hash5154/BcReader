@@ -1,46 +1,44 @@
 <template>
 	<div class="page" style="flex-direction: column;">
 	  <div class="item">
-		  <text style="font-size: 36px;font-weight:bold;color: white;width: 100%;text-align: center;">
+		  <text style="font-size: 30px;font-weight:bold;color: white;width: 100%;text-align: center;">
 			  {{inputPage}}
 		  </text>
-		  <text style="font-size: 24px;font-weight:bold;color: rgba(255, 255, 255, 0.6);width: 100%;text-align: center;">
-			  共 {{syncedChapters}} / {{totalChapters}} 章
+		  <text style="font-size: 20px;font-weight:bold;color: rgba(255, 255, 255, 0.6);width: 100%;text-align: center;">
+			  共 {{totalChapters}} 章
 		  </text>
 	  </div>
-	  <div class="row" style="top:228px">
-		  <img static src="/common/images/num_pad/7.png" @click="onClick('7')"/>
-		  <img static src="/common/images/num_pad/8.png" @click="onClick('8')"/>
-		  <img static src="/common/images/num_pad/9.png" @click="onClick('9')"/>
+	  <div class="row" style="top:209px">
+		  <img src="/common/images/num_pad/7.png" @click="onClick('7')" style="width: 48px; height: 48px;"/>
+		  <img src="/common/images/num_pad/8.png" @click="onClick('8')" style="width: 48px; height: 48px;"/>
+		  <img src="/common/images/num_pad/9.png" @click="onClick('9')" style="width: 48px; height: 48px;"/>
 	  </div>
-	  <div class="row" style="top:298px">
-		  <img static src="/common/images/num_pad/4.png" @click="onClick('4')"/>
-		  <img static src="/common/images/num_pad/5.png" @click="onClick('5')"/>
-		  <img static src="/common/images/num_pad/6.png" @click="onClick('6')"/>
+	  <div class="row" style="top:276px">
+		  <img src="/common/images/num_pad/4.png" @click="onClick('4')" style="width: 48px; height: 48px;"/>
+		  <img src="/common/images/num_pad/5.png" @click="onClick('5')" style="width: 48px; height: 48px;"/>
+		  <img src="/common/images/num_pad/6.png" @click="onClick('6')" style="width: 48px; height: 48px;"/>
 	  </div>
-	  <div class="row" style="top:368px">
-		  <img static src="/common/images/num_pad/1.png" @click="onClick('1')"/>
-		  <img static src="/common/images/num_pad/2.png" @click="onClick('2')"/>
-		  <img static src="/common/images/num_pad/3.png" @click="onClick('3')"/>
+	  <div class="row" style="top:343px">
+		  <img src="/common/images/num_pad/1.png" @click="onClick('1')" style="width: 48px; height: 48px;"/>
+		  <img src="/common/images/num_pad/2.png" @click="onClick('2')" style="width: 48px; height: 48px;"/>
+		  <img src="/common/images/num_pad/3.png" @click="onClick('3')" style="width: 48px; height: 48px;"/>
 	  </div>
-	  <div class="row" style="top:438px">
-		  <img static src="/common/images/num_pad/0.png" @click="onClick('0')"/>
-		  <img static src="/common/images/num_pad/del.png" @click="onClick('del')"/>
+	  <div class="row" style="top:410px; justify-content: center;">
+		  <img src="/common/images/num_pad/0.png" @click="onClick('0')" style="width: 48px; height: 48px; margin-right: 20px;"/>
+		  <img src="/common/images/num_pad/del.png" @click="onClick('del')" style="width: 48px; height: 48px;"/>
+		  <img static src="/common/images/conform.png" @click="onClick('conform')" style="width: 48px; height: 48px;"/>
 	  </div>
   
-  
-	  <img static src="/common/images/back.png" @click="back" style="position: absolute;left: 38px;top: 24px;width: 82px;height: 82px;"/>
-	  <img static src="/common/images/conform.png" @click="onClick('conform')" style="position: absolute;left: 322px;top: 24px;width: 82px;height: 82px;"/>
-	  <text style="position: absolute;left: 130px;top: 16px;width: 172px;line-height: 32px;font-weight:bold;font-size:24px;color:rgba(255,255,255,0.6);text-align:center;">
+	  <text style="position: absolute;left: 44px;top: 12px;width: 104px;line-height: 32px;font-weight:bold;font-size:20px;color:rgba(255,255,255,0.6);text-align:center;">
 		{{nowTime}}
 	  </text>
-	  <text static style="position: absolute;left: 130px;top: 46px;width: 172px;line-height: 42px;font-weight:bold;font-size:32px;color:white;text-align:center;">
+	  <text style="position: absolute;left: 24px;top: 40px;width: 144px;line-height: 42px;font-weight:bold;font-size:28px;color:white;text-align:center;">
 		  跳转章节
 	  </text>
 	</div>
   </template>
   
-  <script>
+<script>
   import router from '@system.router'
   import prompt from '@system.prompt'
   import file from '@system.file'
@@ -53,7 +51,8 @@
 	  nowTime: "00:00",
 	  timer: null,
 	  totalChapters: 1,
-	  syncedChapters: 1
+	  syncedChapters: 1,
+	  activeKey: ''
 	},
 	protected: {
 		name: ''
@@ -123,7 +122,6 @@
 			  
 			  prompt.showToast({ message: '设置成功', duration: 1000 });
 			  globalThis.justJumpedFromPageNumber = true;
-			  globalThis.justJumpedChapterIndex = targetChapterIndex;
 			  router.back();
 		  } catch (e) {
 			  prompt.showToast({ message: '设置失败', duration: 2000 });
@@ -143,34 +141,76 @@
 	},
 	back(){
 		router.back();
+	},
+	onTouchStart(key) {
+		this.activeKey = key;
+	},
+	onTouchEnd() {
+		this.activeKey = '';
 	}
   }
   </script>
   
   <style>
   .page {
-	  width: 432px;
-	  height: 514px;
+	  width: 192px;
+	  height: 490px;
 	  background-color: #000000;
+  }
+  
+  .more-info {
+	width: 191px;
+	background-color: rgb(0,0,0);
+  }
+  
+  .caltext {
+	  width: 192px;
+	  lines: 4;
+	  text-overflow: clip;
+	  font-size: 26px;
+	  color: rgb(255,255,255);
+	  text-align: left;
+	  height: 140px;
+  }
+  
+  .list {
+	  width: 192px;
+	  height: 400px;
+	  position: absolute;
+	  top:72px;
   }
   
   .item {
 	  position: absolute;
-	  left: 27px;
-	  top: 114px;
-	  width: 378px;
-	  height: 102px;
+	  left: 0px;
+	  top: 86px;
+	  width: 192px;
+	  height: 115px;
 	  border-radius: 36px;
 	  flex-direction: column;
 	  border: 3px solid #262626;
 	  justify-content: center;
   }
-
+  
+  .itemtext {
+	  font-size: 30px;
+	  font-weight: bold;
+	  height: 68px;
+	  width: 102px;
+	  color: white;
+	  text-align: center;
+	  text-overflow: ellipsis;
+	  lines: 1;
+	  padding: 10px;
+	  margin-right: 9px;
+	  background-color: #262626;
+	  border-radius:12px;
+  }
+  
   .row {
 	  position:absolute;
-	  left: 32px;
-	  width:358px;
-	  height:77px;
+	  width:192px;
+	  height:64px;
 	  padding:0px 6px;
 	  justify-content: space-between;
   }

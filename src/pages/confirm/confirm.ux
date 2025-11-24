@@ -1,18 +1,16 @@
 <template>
     <div class="page">
-        <img static src="/common/images/hd.png" style="position: absolute;left: 0px;top: 0px;width: 432px;height: 102px;" />
-        <img static src="/common/images/back.png" @click="back" style="position: absolute;left: 38px;top: 24px;width: 82px;height: 82px;"/>
-        <img static if="{{action!=='versionError'}}" src="/common/images/delete.png" @click="confirmAction" style="position: absolute;left: 322px;top: 24px;width: 82px;height: 82px;"/>
-        <text style="position: absolute;left: 130px;top: 16px;width: 172px;line-height: 32px;font-weight:bold;font-size:24px;color:rgba(255,255,255,0.6);text-align:center;">
+        <img static if="{{action!=='versionError'}}" src="/common/images/delete.png" @click="confirmAction" style="position: absolute;bottom: 6px;left:60px;width: 72px;height: 72px;"/>
+        <text style="position: absolute;left: 44px;top: 12px;width: 104px;line-height: 32px;font-weight:bold;font-size:20px;color:rgba(255,255,255,0.6);text-align:center;">
             {{nowTime}}
         </text>
-        <text style="position: absolute;left: 130px;top: 46px;width: 172px;line-height: 42px;font-weight:bold;font-size:32px;color:white;text-align:center;">
+        <text style="position: absolute;left: 24px;top: 40px;width: 144px;line-height: 42px;font-weight:bold;font-size:28px;color:white;text-align:center;">
             {{title}}
         </text>
 
-        <img static src="/common/images/bin.png" style="position: absolute;left: 152px;top: 156px;width: 128px;height: 128px;" />
-        <text style="position: absolute;left: 0px;top: 319px;width: 432px;line-height: 42px;font-weight:bold;font-size:32px;color:white;text-align:center;">{{confirmText}}</text>
-        <text style="position: absolute;left: 0px;top: 361px;width: 432px;line-height: 32px;font-weight:bold;font-size:24px;color:rgba(255,255,255,0.6);text-align:center;padding:0 20px;">{{subText}}</text>
+        <img src="/common/images/bin.png" style="position: absolute;left: 32px;top: 146px;width: 128px;height: 128px;" />
+        <text style="position: absolute;left: 0px;top: 298px;width: 192px;line-height: 42px;font-weight:bold;font-size:22px;color:white;text-align:center;">{{confirmText}}</text>
+        <text style="position: absolute;left: 0px;top: 340px;width: 192px;line-height: 32px;font-weight:bold;font-size:20px;color:rgba(255,255,255,0.6);text-align:center;padding:0 20px;">{{subText}}</text>
     </div>
 </template>
 
@@ -22,6 +20,8 @@ import prompt from '@system.prompt'
 import file from '@system.file'
 import storage from '../../common/storage.js'
 import bookStorage from '../../common/bookStorage.js'
+
+const BOOKSHELF_URI = 'internal://files/books/bookshelf.json';
 
 export default {
     private: {
@@ -87,17 +87,15 @@ export default {
         }
 
         try {
-            
-            let bookmarks = await bookStorage.getBookmarks(this.bookName);
-            if (bookmarks && bookmarks[this.bookmarkIndex] !== undefined) {
-                bookmarks.splice(this.bookmarkIndex, 1);
-                
-                await bookStorage.setBookmarks(this.bookName, bookmarks);
-                bookmarks = null;
+            let progress = await bookStorage.get(this.bookName);
+            if (progress.bookmarks && progress.bookmarks[this.bookmarkIndex] !== undefined) {
+                progress.bookmarks.splice(this.bookmarkIndex, 1);
+                await bookStorage.set(this.bookName, progress);
+                progress = null;
                 prompt.showToast({ message: '删除成功' });
                 router.back();
             } else {
-                bookmarks = null;
+                progress = null;
                 prompt.showToast({ message: '找不到书签' });
                 router.back();
             }
@@ -116,12 +114,6 @@ export default {
         const that = this;
         const dirName = this.cPath.split('/').pop();
 
-        if (!dirName) {
-            prompt.showToast({ message: '书籍目录名无效' });
-            router.back();
-            return;
-        }
-
         file.rmdir({
             uri: this.cPath,
             recursive: true,
@@ -129,19 +121,37 @@ export default {
                 that.updateBookshelf(dirName);
             },
             fail: (data, code) => {
-                that.updateBookshelf(dirName);
+                prompt.showToast({ message: `删除失败: ${code}`, duration: 1000 });
+                router.back();
             }
         });
     },
-    async updateBookshelf(dirName) {
-        if (!dirName) {
-            prompt.showToast({ message: '删除成功', duration: 1000 });
-            router.replace({ uri: '/pages/index' });
-            return;
-        }
-        await bookStorage.removeBook(dirName);
-        prompt.showToast({ message: '删除成功', duration: 1000 });
-        router.replace({ uri: '/pages/index' });
+    updateBookshelf(dirName) {
+        file.readText({
+            uri: BOOKSHELF_URI,
+            success: function(data) {
+                try {
+                    let bookshelf = JSON.parse(data.text);
+                    const newBookshelf = bookshelf.filter(b => b.dirName !== dirName);
+                    bookshelf = null;
+                    file.writeText({
+                        uri: BOOKSHELF_URI,
+                        text: JSON.stringify(newBookshelf),
+                        complete: function() {
+                            prompt.showToast({ message: '删除成功', duration: 1000 });
+                            router.replace({ uri: '/pages/index' });
+                        }
+                    });
+                } catch (e) {
+                     prompt.showToast({ message: '删除成功', duration: 1000 });
+                     router.replace({ uri: '/pages/index' });
+                }
+            },
+            fail: function() {
+                prompt.showToast({ message: '删除成功', duration: 1000 });
+                router.replace({ uri: '/pages/index' });
+            }
+        });
     },
     clearBookshelf() {
         prompt.showToast({ message: '开始删除...', duration: 500 });
@@ -163,8 +173,8 @@ export default {
 
 <style>
 .page {
-    width: 432px;
-    height: 514px;
+    width: 192px;
+    height: 490px;
     background-color: #000000;
     flex-direction: column;
     align-items: center;

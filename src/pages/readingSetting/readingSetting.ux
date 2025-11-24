@@ -5,110 +5,95 @@
 		  <list-item class="item" @click="routerTo('opacity')" type="item">
 			  <div class="item-content">
 				  <text class="itemtext" static>字体亮度</text>
-				  <text class="itemtext2" static>设置阅读字体亮度</text>
+				  <marquee class="itemtext2" scrollamount="20" text-offset="25" static>设置阅读字体亮度</marquee>
 			  </div>
 			  <img src="/common/images/enter.png" style="width:40px;height: 40px;" static/>
 		  </list-item>
 		  <list-item class="item" @click="routerTo('screenBrightness')" type="item">
 			  <div class="item-content">
 				  <text class="itemtext" static>屏幕亮度</text>
-				  <text class="itemtext2" static>应用内屏幕亮度</text>
+				  <marquee class="itemtext2" scrollamount="20" text-offset="25" static>应用内屏幕亮度</marquee>
 			  </div>
 			  <img src="/common/images/enter.png" style="width:40px;height: 40px;" static/>
 		  </list-item>
 		  <list-item class="item" @click="routerTo('timeSetting')" type="item">
-			  <div class="item-content">
-				  <text class="itemtext" static>时间常驻</text>
-				  <text class="itemtext2" static>始终显示时间</text>
-			  </div>
-			  <img src="/common/images/enter.png" style="width:40px;height: 40px;" static/>
-		  </list-item>
+			<div class="item-content">
+				<text class="itemtext" static>时间常驻</text>
+				<marquee class="itemtext2" scrollamount="20" text-offset="25" static>始终显示时间</marquee>
+			</div>
+			<img src="/common/images/enter.png" style="width:40px;height: 40px;" static/>
+		</list-item>
 		  <list-item class="item" @click="routerTo('fontSetting')" type="item">
 			  <div class="item-content">
 				  <text class="itemtext" static>字号</text>
-				  <text class="itemtext2" static>设置阅读字体大小</text>
+				  <marquee class="itemtext2" scrollamount="20" text-offset="25" static>设置阅读字体大小</marquee>
 			  </div>
 			  <img src="/common/images/enter.png" style="width:40px;height: 40px;" static/>
 		  </list-item>
 		  <list-item class="item" @click="routerTo('marginSetting')" type="item">
 			  <div class="item-content">
 				  <text class="itemtext" static>垂直边距</text>
-				  <text class="itemtext2" static>调整屏幕留白</text>
+				  <marquee class="itemtext2" scrollamount="20" text-offset="25" static>调整屏幕留白</marquee>
 			  </div>
 			  <img src="/common/images/enter.png" style="width:40px;height: 40px;" static/>
 		  </list-item>
-		  <list-item class="item" @click="routerTo('chapterSwitchStyle')" type="item" if="{{readMode !== 'nostalgic'}}">
+		  <list-item class="item" @click="routerTo('chapterSwitchStyle')" type="item">
 			<div class="item-content">
 				<text class="itemtext" static>翻章方式</text>
-				<text class="itemtext2" static>按钮或滑动翻章</text>
+				<marquee class="itemtext2" scrollamount="20" text-offset="25" static>按钮或滑动翻章</marquee>
 			</div>
 			<img src="/common/images/enter.png" style="width:40px;height: 40px;" static/>
 	  	</list-item>
-		  <list-item class="item" @click="routerTo('chapterSwitchSetting')" type="item" if="{{chapterSwitchStyle == 'button' && readMode !== 'nostalgic'}}">
+		  <list-item class="item" @click="routerTo('chapterSwitchSetting')" type="item" if="{{chapterSwitchStyle == 'button'}}">
 			<div class="item-content">
 				<text class="itemtext" static>换章按钮</text>
-				<text class="itemtext2" static>调整翻章按钮</text>
+				<marquee class="itemtext2" scrollamount="20" text-offset="25" static>调整翻章按钮</marquee>
 			</div>
 			<img src="/common/images/enter.png" style="width:40px;height: 40px;" static/>
 	  	</list-item>
-		  <list-item class="item" @click="routerTo('chapterSwitchSensitivity')" type="item" if="{{chapterSwitchStyle == 'boundary' && readMode !== 'nostalgic'}}">
+		  <list-item class="item" @click="routerTo('chapterSwitchSensitivity')" type="item" if="{{chapterSwitchStyle == 'boundary'}}">
 			<div class="item-content">
-				<text class="itemtext" static>换章灵敏度</text>
-				<text class="itemtext2" static>越界换章灵敏度</text>
+				<marquee scrollamount="20" text-offset="25" static class="itemtext" >换章灵敏度</marquee>
+				<marquee class="itemtext2" scrollamount="20" text-offset="25" static>越界换章灵敏度</marquee>
 			</div>
 			<img src="/common/images/enter.png" style="width:40px;height: 40px;" static/>
 		</list-item>
-		<list-item class="item" @click="routerTo('swipeSensitivity')" type="item" if="{{chapterSwitchStyle == 'swipe' && readMode !== 'nostalgic'}}">
+		<list-item class="item" @click="routerTo('swipeSensitivity')" type="item" if="{{chapterSwitchStyle == 'swipe'}}">
 			<div class="item-content">
-				<text class="itemtext" static>换章灵敏度</text>
-				<text class="itemtext2" static>左右滑动灵敏度</text>
+				<marquee scrollamount="20" text-offset="25" static class="itemtext" >换章灵敏度</marquee>
+				<marquee class="itemtext2" scrollamount="20" text-offset="25" static>左右滑动灵敏度</marquee>
 			</div>
 			<img src="/common/images/enter.png" style="width:40px;height: 40px;" static/>
 		</list-item>
-		  <list-item class="item" @click="routerTo('swipe')" type="item" if="{{readMode !== 'nostalgic'}}">
+		  <list-item class="item" @click="routerTo('swipe')" type="item">
 			  <div class="item-content">
 				  <text class="itemtext" static>滑动翻页</text>
-				  <text class="itemtext2" static>管理滑动翻页选项</text>
+				  <marquee class="itemtext2" scrollamount="20" text-offset="25" static>管理滑动翻页选项</marquee>
 			  </div>
 			  <img src="/common/images/enter.png" style="width:40px;height: 40px;" static/>
 		  </list-item>
 		  <list-item class="item" @click="routerTo('autoRead')" type="item">
 			  <div class="item-content">
 				  <text class="itemtext" static>自动翻页</text>
-				  <text class="itemtext2" static>设置自动翻页选项</text>
+				  <marquee class="itemtext2" scrollamount="20" text-offset="25" static>设置自动翻页选项</marquee>
 			  </div>
 			  <img src="/common/images/enter.png" style="width:40px;height: 40px;" static/>
 		  </list-item>
-		  <list-item class="item" @click="routerTo('autoReadDistanceSetting')" type="item" if="{{readMode !== 'nostalgic'}}">
+		  <list-item class="item" @click="routerTo('autoReadDistanceSetting')" type="item">
 			<div class="item-content">
 				<text class="itemtext" static>翻页距离</text>
-				<text class="itemtext2" static>自动翻页距离</text>
+				<marquee class="itemtext2" scrollamount="20" text-offset="25" static>自动翻页距离</marquee>
 			</div>
 			<img src="/common/images/enter.png" style="width:40px;height: 40px;" static/>
 	  	</list-item>
-		  <list-item class="item" @click="routerTo('progressBarSetting')" type="item">
-			<div class="item-content">
-				<text class="itemtext" static>章节进度条</text>
-				<text class="itemtext2" static>开关和功能样式</text>
-			</div>
-			<img src="/common/images/enter.png" style="width:40px;height: 40px;" static/>
-		</list-item>
-		  <list-item class="item" @click="routerTo('readModeSetting')" type="item">
-			<div class="item-content">
-				<text class="itemtext" static>阅读模式</text>
-				<text class="itemtext2" static>环间电子书的衣</text>
-			</div>
-			<img src="/common/images/enter.png" style="width:40px;height: 40px;" static/>
-		</list-item>
 	  </list>
   
 	  
-	  <img static src="/common/images/hd.png" style="position: absolute;left: 0px;top: 0px;width: 432px;height: 102px;" />
-	  <img static src="/common/images/back.png" @click="back" style="position: absolute;left: 38px;top: 24px;width: 82px;height: 82px;"/>
-	  <text style="position: absolute;left: 130px;top: 16px;width: 172px;line-height: 32px;font-weight:bold;font-size:24px;color:rgba(255,255,255,0.6);text-align:center;">
-		  {{nowTime}}
+	  <img static src="/common/images/hd.png" style="position: absolute;left: 0px;top: 0px;width: 192px;height: 102px;" />
+	  <text style="position: absolute;left: 44px;top: 12px;width: 104px;line-height: 32px;font-weight:bold;font-size:20px;color:rgba(255,255,255,0.6);text-align:center;">
+		{{nowTime}}
 	  </text>
-	  <text static style="position: absolute;left: 130px;top: 46px;width: 172px;line-height: 42px;font-weight:bold;font-size:32px;color:white;text-align:center;">
+	  <text static style="position: absolute;left: 24px;top: 40px;width: 144px;line-height: 42px;font-weight:bold;font-size:28px;color:white;text-align:center;">
 		  阅读设置
 	  </text>
 	</div>
@@ -118,16 +103,16 @@
   import router from '@system.router'
   import prompt from '@system.prompt'
   import app from '@system.app'
+  import file from '@system.file'
   import storage from '../../common/storage.js'
   
   
   export default {
-  private: {
+	private: {
 	  nowTime: "00:00",
 	  timer: null,
 	  chapterSwitchStyle: 'button',
-    timeFormat: '24h',
-	  readMode: 'scroll'
+    timeFormat: '24h'
 	},
 	protected: {
 	  cPath: '',
@@ -175,9 +160,6 @@
     storage.get({ key: 'EBOOK_TIME_FORMAT', success: (data) => {
         if (data) this.timeFormat = data;
     }});
-		storage.get({ key: 'EBOOK_READ_MODE', success: (data) => {
-			if (data) this.readMode = data;
-		}});
 	},
 	onDestroy(){
 		if (this.timer) {
@@ -213,26 +195,42 @@
 	}
   }
   </script>
-  
-  <style>
+
+<style>
   .page {
-	  width: 432px;
-	  height: 514px;
+	  width: 192px;
+	  height: 490px;
 	  background-color: #000000;
   }
+  
+  .more-info {
+	width: 192px;
+	background-color: rgb(0,0,0);
+  }
+  
+  .caltext {
+	  width: 192px;
+	  lines: 4;
+	  text-overflow: clip;
+	  font-size: 26px;
+	  color: rgb(255,255,255);
+	  text-align: left;
+	  height: 140px;
+  }
+  
   .list {
-	  width: 432px;
-	  height: 514px;
+	  width: 192px;
+	  height: 490px;
 	  position: absolute;
 	  top:0px;
 	  left:0px;
-	padding: 116px 12px;
+	padding: 66px 6px;
   }
   
   .item {
 	  width: 100%;
 	  height: 112px;
-	  padding: 14px 20px;
+	  padding: 10px 20px;
 	  margin-bottom: 8px;
 	  background-color: #262626;
 	  border-radius: 36px;
@@ -241,7 +239,7 @@
   }
   
   .itemtext {
-	  font-size: 32px;
+	  font-size: 24px;
 	  line-height:40px;
 	  width: 100%;
 	  font-weight: bold;
@@ -251,8 +249,8 @@
   }
   
   .itemtext2 {
-	  font-size: 28px;
-	  line-height: 37px;
+	  font-size: 24px;
+	  line-height: 32px;
 	  font-weight: bold;
 	  color: rgba(255,255,255,0.6);
 	  text-overflow: ellipsis;

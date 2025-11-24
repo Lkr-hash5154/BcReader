@@ -1,8 +1,8 @@
 <template>
   <div class="page">
-    <div style="position: absolute;left: 0px;top: 0px;width: 432px;height: 514px;">
-      <img src="/common/images/infodetail.png" style="position: absolute;left: 48px;" static/>
-      <img src="/common/images/conform2.png" style="position: absolute;left: 165px;top: 420px;width: 102px;height: 72px;" @click="back('')" static/>
+    <div style="position: absolute;left: 0px;top: 0px;width: 192px;height: 490px;flex-direction: column; align-items: center;">
+      <img src="/common/images/infodetail.png" style="width: 192px; height: auto;"/>
+      <img src="/common/images/conform2.png" style="position: absolute; bottom: 20px; width: 102px;height: 72px;" @click="back('')"/>
     </div>
   </div>
 </template>
@@ -20,9 +20,11 @@ export default {
 
 <style>
 .page {
-	width: 432px;
-	height: 514px;
+	width: 192px;
+	height: 490px;
 	background-color: #000000;
 }
+
+/* 更多信息样式 */
 
 </style>

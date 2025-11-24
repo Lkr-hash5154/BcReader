@@ -1,21 +1,21 @@
 <template>
 	<div class="page" style="flex-direction: column;">
 		<div class="item">
-			<img static src="/common/images/Switch_ON.png" style="width: 113px;height: 80px;" @click="toggleFeature" if="{{isEnabled}}"/>
-			<img static src="/common/images/Switch_OFF.png" style="width: 113px;height: 80px;" @click="toggleFeature" else/>
-			<text style="font-size: 36px;font-weight:bold;color: white;width: 100%;text-align: center;top: 25px;">
+			<img static src="/common/images/Switch_ON.png" style="width: 102px;height: 72px;" @click="toggleFeature" if="{{isEnabled}}"/>
+			<img static src="/common/images/Switch_OFF.png" style="width: 102px;height: 72px;" @click="toggleFeature" else/>
+			<text style="font-size: 30px;font-weight:bold;color: white;width: 100%;text-align: center;top: 25px;">
 				{{isEnabled ? 'ON' : 'OFF'}}
 			</text>
-            <text static style="font-size: 24px; color: white; text-align: left; padding: 20px; lines: 3; margin-top: 35px;">
+            <text style="font-size: 20px; color: white; text-align: left; padding: 6px; lines: 5; margin-top: 35px;">
                 开启后，阅读时短时间内连续点击三次屏幕自动退出电子书。
 			</text>
 		</div>
 
-		<img static src="/common/images/back.png" @click="back" style="position: absolute;left: 38px;top: 24px;width: 82px;height: 82px;"/>
-		<text style="position: absolute;left: 130px;top: 16px;width: 172px;line-height: 32px;font-weight:bold;font-size:24px;color:rgba(255,255,255,0.6);text-align:center;">
+		
+		<text style="position: absolute;left: 44px;top: 12px;width: 104px;line-height: 32px;font-weight:bold;font-size:20px;color:rgba(255,255,255,0.6);text-align:center;">
 		  {{nowTime}}
 		</text>
-		<text static style="position: absolute;left: 130px;top: 46px;width: 172px;line-height: 42px;font-weight:bold;font-size:32px;color:white;text-align:center;">
+		<text style="position: absolute;left: 24px;top: 40px;width: 144px;line-height: 42px;font-weight:bold;font-size:28px;color:white;text-align:center;">
 			老师屏
 		</text>
 	</div>
@@ -55,10 +55,7 @@ export default {
         });
 	},
 	onDestroy(){
-	  if (this.timer) {
-      clearInterval(this.timer);
-      this.timer = null;
-    }
+	  clearInterval(this.timer);
 	},
     toggleFeature() {
         const targetState = !this.isEnabled;
@@ -91,16 +88,16 @@ export default {
 
 <style>
 .page {
-	width: 432px;
-	height: 514px;
+	width: 192px;
+	height: 490px;
 	background-color: #000000;
 }
 
 .item {
 	position: absolute;
-	left: 27px;
-	top: 112px;
-	width: 378px;
+	left: 0px;
+	top: 86px;
+	width: 192px;
 	height: 348px;
 	border-radius: 36px;
 	flex-direction: column;
